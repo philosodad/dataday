@@ -74,5 +74,20 @@ defmodule DataMunger.GraphTraverseTest do
     end
   end
 
+  describe "title principal ids from movies" do
+    test "gets rows that match movies and actors" do
+      {actors, movies} = ["nm0000204"]
+                          |> GraphTraverse.movies_and_actors([], 2)
+     
+      principals = GraphTraverse.principals_from_movies(movies)
+      principals
+      |> Enum.each(fn(p) ->
+        tipr = ImdbRepo.get(TitlePrincipal, p)
+        assert tipr.nconst in actors
+        assert tipr.tconst in movies
+        assert tipr.category in ["actor", "actress"]
+      end)
+    end
+  end
 end
 

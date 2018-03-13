@@ -24,6 +24,18 @@ defmodule DataMunger.GraphTraverse do
     |> ImdbRepo.all()
   end
 
+  def principals_from_movies(movies) do
+    movies
+    |> Enum.flat_map(fn(movie) ->
+      from(p in TitlePrincipal,
+      where: p.tconst == ^movie and
+      ilike(p.category, "act%"),
+      select: p.id)
+      |> ImdbRepo.all()
+    end)
+    |> Enum.uniq
+  end
+
   def movies_and_actors(actors, movies, 0) do
     {actors, movies}
   end
