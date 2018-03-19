@@ -26,7 +26,7 @@ defmodule DataMunger.MovieActor do
   @doc false 
   def add_category(changeset, attrs) do
     case attrs
-         |> Map.get(:characters) |> IO.inspect  do
+         |> Map.get(:characters) do
 
        nil -> changeset
        character_string -> characters = character_string

@@ -20,6 +20,20 @@ defmodule DataMunger.GraphTraverseTest do
       end)
     end
 
+    test "the movies are related to the name" do
+      ["nm0000203", "nm0000702", "nm0000204", "nm0000102"]
+      |> Enum.each(fn(n) ->
+        GraphTraverse.movies_for_actor(n)
+        |> Enum.map(fn(m) ->
+          ImdbRepo.get_by(TitlePrincipal, nconst: n, tconst: m)
+        end)
+        |> Enum.map(fn(principal) ->
+          assert String.match?(principal.category, ~r/act/)
+        end)
+        |> (&(assert Enum.count(&1) == 3)).()
+      end)
+    end
+
     test "given a name and count, finds count movies" do
       [2,4,9]
       |> Enum.each(fn(n) ->
@@ -65,12 +79,12 @@ defmodule DataMunger.GraphTraverseTest do
       |> Enum.each(fn(a) ->
         assert String.match?(a, ~r/nm[0-9]{7}/)
       end)
-      assert Enum.count(actors) > 1
+      assert Enum.count(actors) > 18
       assert movies 
              |> Enum.uniq()
              |> Enum.count() == movies 
                                 |> Enum.count()
-      assert Enum.count(movies) > 1
+      assert Enum.count(movies) > 6
     end
   end
 

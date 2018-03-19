@@ -16,3 +16,4 @@ config :data_munger, DataMunger.ImdbRepo,
   database: "data_imdb",
   hostname: "localhost",
   pool_size: 10
+
